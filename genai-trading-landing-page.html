@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generative AI Trading Co. | AI Infrastructure for the Middle East</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a27;
+  --accent: #00d4aa;
+  --accent2: #7c5cfc;
+  --accent3: #ff6b35;
+  --text: #e8e8ef;
+  --text-dim: #8888a0;
+  --border: #2a2a3d;
+  --glow: rgba(0, 212, 170, 0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ── GRID NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,212,170,0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(124,92,252,0.06), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0;
+  padding: 1.2rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  background: rgba(10,10,15,0.7);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+.nav-logo span { color: var(--text-dim); font-weight: 400; }
+
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: color 0.3s;
+  letter-spacing: 0.03em;
+}
+.nav-links a:hover { color: var(--accent); }
+
+.nav-cta {
+  background: var(--accent) !important;
+  color: var(--bg) !important;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 3rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+
+.hero-tag::before {
+  content: '';
+  width: 40px; height: 1px;
+  background: var(--accent);
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--text-dim);
+  max-width: 560px;
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,212,170,0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  padding: 0.9rem 2rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── STATS BAR ── */
+.stats-bar {
+  display: flex; gap: 3rem; flex-wrap: wrap;
+  padding: 3rem 0;
+  margin-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.stat {
+  display: flex; flex-direction: column;
+}
+
+.stat-value {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 0.2rem;
+}
+
+/* ── SECTIONS ── */
+section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 3rem;
+}
+
+.section-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--accent2);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  color: var(--text-dim);
+  font-size: 1.05rem;
+  max-width: 600px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* ── PRODUCTS GRID ── */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.product-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.product-card:hover {
+  border-color: rgba(0,212,170,0.3);
+  transform: translateY(-4px);
+}
+
+.product-card:hover::before { opacity: 1; }
+
+.product-icon {
+  width: 48px; height: 48px;
+  background: var(--surface2);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.product-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 0.6rem;
+}
+
+.product-card p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.product-badge {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--accent);
+  background: rgba(0,212,170,0.1);
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ── TECH STACK ── */
+.tech-section {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.tech-item {
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.tech-item h4 {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+.tech-item p {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+/* ── MARKET SECTION ── */
+.market-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.market-card {
+  padding: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.market-card .big-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 3rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.market-card .label {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+/* ── FOUNDER ── */
+.founder-section {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3rem;
+  align-items: start;
+  margin-top: 3rem;
+}
+
+.founder-photo {
+  width: 120px; height: 120px;
+  border-radius: 16px;
+  background: var(--surface2);
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem;
+}
+
+.founder-info h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.founder-info .role {
+  color: var(--accent);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+}
+
+.founder-info p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+.founder-tags {
+  display: flex; gap: 0.6rem; flex-wrap: wrap;
+  margin-top: 1.2rem;
+}
+
+.founder-tags span {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+}
+
+/* ── CTA ── */
+.cta-section {
+  text-align: center;
+  padding: 6rem 3rem;
+}
+
+.cta-section .section-title { max-width: none; }
+
+.cta-email {
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  color: var(--accent);
+  margin-top: 1.5rem;
+  display: block;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 1rem;
+}
+
+footer p {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.footer-legal {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 7rem 1.5rem 3rem; }
+  section { padding: 4rem 1.5rem; }
+  .stats-bar { gap: 2rem; }
+  .founder-section { grid-template-columns: 1fr; }
+  footer { flex-direction: column; text-align: center; }
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-tag, .hero h1, .hero-sub, .hero-actions, .stats-bar {
+  animation: fadeUp 0.8s ease forwards;
+  opacity: 0;
+}
+.hero h1 { animation-delay: 0.1s; }
+.hero-sub { animation-delay: 0.2s; }
+.hero-actions { animation-delay: 0.3s; }
+.stats-bar { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">GenAI Trading <span>Co.</span></div>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#technology">Technology</a>
+    <a href="#market">Market</a>
+    <a href="#founder">Team</a>
+    <a href="#contact" class="nav-cta">Get in Touch</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Dubai, UAE &bull; Building for 400M+ in MENA</div>
+  <h1>AI Infrastructure<br>for the <span class="highlight">Middle East</span></h1>
+  <p class="hero-sub">We build AI-native products that work in Arabic-first markets. Local LLM deployment. Multi-agent automation. Enterprise-grade AI for a region the big players haven't reached yet.</p>
+  <div class="hero-actions">
+    <a href="#contact" class="btn-primary">Partner With Us &rarr;</a>
+    <a href="#products" class="btn-secondary">See What We're Building</a>
+  </div>
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-value">400M+</div>
+      <div class="stat-label">MENA Population</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">&lt;2%</div>
+      <div class="stat-label">AI Tool Penetration in Arabic Markets</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">120B+</div>
+      <div class="stat-label">Parameter Local LLM Stack</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">2023</div>
+      <div class="stat-label">Founded in Dubai</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="section-tag">What We Build</div>
+  <h2 class="section-title">AI Products for Underserved Markets</h2>
+  <p class="section-desc">Every major AI company is building for English-speaking enterprise. We're building for the 400 million people in MENA who've been left behind.</p>
+  
+  <div class="products-grid">
+    <div class="product-card">
+      <div class="product-icon">🤖</div>
+      <h3>OpenClaw</h3>
+      <p>Personal AI command system powered by locally-hosted LLMs with 120B+ parameters. Multi-agent orchestration controlled via Telegram — replacing expensive API dependencies with sovereign AI infrastructure.</p>
+      <div class="product-badge">In Development</div>
+    </div>
+    <div class="product-card">
+      <div class="product-icon">🏛️</div>
+      <h3>MENA Business Automation</h3>
+      <p>AI agents designed for Arabic-language government portals, enterprise workflows, and business operations. Built to navigate the specific complexities of doing business in the Gulf and Iraq.</p>
+      <div class="product-badge">In Development</div>
+    </div>
+    <div class="product-card">
+      <div class="product-icon">🛒</div>
+      <h3>AI-Powered Commerce Tools</h3>
+      <p>Intelligent e-commerce infrastructure for MENA markets — from Arabic-first product cataloging to AI-driven customer service that understands regional dialects and purchasing behavior.</p>
+      <div class="product-badge">In Development</div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH -->
+<section id="technology" class="tech-section">
+  <div class="section-tag">Our Stack</div>
+  <h2 class="section-title">Built on Open, Sovereign AI</h2>
+  <p class="section-desc">We don't rent intelligence — we run it. Our infrastructure is built on open-weight models, locally deployed, zero API dependency.</p>
+  
+  <div class="tech-grid">
+    <div class="tech-item">
+      <h4>Local LLMs</h4>
+      <p>GLM-5, Qwen3.5-397B, GLM-4.7 — open-licensed, locally hosted</p>
+    </div>
+    <div class="tech-item">
+      <h4>Orchestration</h4>
+      <p>LiteLLM for multi-model routing across 20+ specialized agents</p>
+    </div>
+    <div class="tech-item">
+      <h4>Memory</h4>
+      <p>3-layer system: system prompts, RAG via ChromaDB/Qdrant, long-context</p>
+    </div>
+    <div class="tech-item">
+      <h4>Infrastructure</h4>
+      <p>Mac Studio 512GB unified memory + high-performance Windows GPU nodes</p>
+    </div>
+    <div class="tech-item">
+      <h4>Interface</h4>
+      <p>Telegram-native command system for mobile-first MENA users</p>
+    </div>
+    <div class="tech-item">
+      <h4>Cost Model</h4>
+      <p>Zero API costs — electricity-only operating model at ~$0.02/hr</p>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section id="market">
+  <div class="section-tag">The Opportunity</div>
+  <h2 class="section-title">The Arabic AI Gap</h2>
+  <p class="section-desc">Arabic is the 5th most spoken language in the world. It's massively underrepresented in AI tooling, creating a generational opportunity.</p>
+  
+  <div class="market-stats">
+    <div class="market-card">
+      <div class="big-num">5th</div>
+      <div class="label">Most spoken language globally</div>
+    </div>
+    <div class="market-card">
+      <div class="big-num">$3T+</div>
+      <div class="label">Combined MENA GDP</div>
+    </div>
+    <div class="market-card">
+      <div class="big-num">70%</div>
+      <div class="label">MENA population under 35</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section id="founder">
+  <div class="section-tag">Leadership</div>
+  <h2 class="section-title">Built by a MENA-Native Operator</h2>
+  
+  <div class="founder-section">
+    <div class="founder-photo">👤</div>
+    <div class="founder-info">
+      <h3>Asaad Sajit</h3>
+      <div class="role">Founder & CEO</div>
+      <p>Entrepreneur with 10+ years building and scaling businesses across Dubai and Iraq — from car rentals to e-commerce to AI. Now focused full-time on bringing AI infrastructure to the MENA region, with deep operational knowledge of how business actually works in the Gulf and the Levant.</p>
+      <div class="founder-tags">
+        <span>Dubai, UAE</span>
+        <span>10+ Years Entrepreneurship</span>
+        <span>Iraq & Gulf Markets</span>
+        <span>AI Infrastructure</span>
+        <span>E-Commerce</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" class="cta-section">
+  <div class="section-tag">Get in Touch</div>
+  <h2 class="section-title">Let's Build the Future of<br>AI in the Middle East</h2>
+  <p class="section-desc" style="max-width:600px;margin:1rem auto 0;">We're looking for partners, investors, and collaborators who see the opportunity in bringing world-class AI to 400 million underserved people.</p>
+  <a class="cta-email" href="mailto:asaadmohsinllc@gmail.com">asaadmohsinllc@gmail.com</a>
+  <div style="margin-top:2rem;">
+    <a href="https://www.linkedin.com/in/asaadsajit" class="btn-secondary" style="display:inline-block;">LinkedIn &rarr;</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2025 Generative AI Trading Co. L.L.C &bull; Dubai, UAE</p>
+  <div class="footer-legal">License No. 1195927 &bull; Dubai Dept. of Economy & Tourism</div>
+</footer>
+
+</body>
+</html>
